@@ -44,19 +44,27 @@ def q2poly(robot: typing.Dict[str, typing.List[float]], q: typing.List[float]) -
     
     # (len(robot["link1"]) is 5, each polygon has 5 vertices where the 1st and 5th are the same, so that the polygon is closed
     # when drawing (I believe).
+    
+    T1toW = Get2DTransformationMatrix(q[0], robot["pivot1"][0], robot["pivot1"][1]) # Transform from Frame 1 to World
+    T2toW = T1toW @ Get2DTransformationMatrix(q[1], robot["pivot2"][0], robot["pivot2"][1]) # Transform from Frame 2 to World
+
     pivot1 = np.array(robot["pivot1"]) # Pivot 1 never will change
+
     shape1 = np.array(robot["link1"])
     shape1 = RowVectorsToColumnVectorsWithHomogeneousCoord(shape1)
-    shape1 = Get2DRotation(q[0]) @ shape1 # Rotate shape1 around the first pivot
+    shape1 = T1toW @ shape1 
     shape1 = ColumnVectorsToRowVectorsWithoutHomogeneousCoord(shape1)
 
     pivot2 = np.array(robot["pivot2"]).reshape(1, -1) # Reshape becuase numpy wants to make it an array instead of row vector 
     pivot2 = RowVectorsToColumnVectorsWithHomogeneousCoord(pivot2)
-    pivot2 = Get2DRotation(q[0]) @ pivot2 #Pivot 2 is rotated around Pivot 1
+    pivot2 = T1toW @ pivot2
     pivot2 = ColumnVectorsToRowVectorsWithoutHomogeneousCoord(pivot2)
     pivot2 = pivot2[0] # Extracts only the first row, as this is a row vector in a 2D array
 
-    shape2 = np.array(robot["link2"]) # Should be rotated around pivot 1 # Should be rotated around first pivot 1 then pivot 2
+    shape2 = np.array(robot["link2"])
+    shape2 = RowVectorsToColumnVectorsWithHomogeneousCoord(shape2)
+    shape2 = T2toW @ shape2
+    shape2 = ColumnVectorsToRowVectorsWithoutHomogeneousCoord(shape2)
     
     return shape1, shape2, pivot1, pivot2
 
@@ -69,13 +77,13 @@ def ColumnVectorsToRowVectorsWithoutHomogeneousCoord(points: np.array):
 
 
 # Returns an rotation matrix, which will work on column vectors
-def Get2DRotation(radians: float) -> np.array:
+def Get2DTransformationMatrix(radians: float, translateX: float, translateY: float) -> np.array:
     if (radians < 0 or radians > 2 * np.pi):
         raise ValueError("Cannot rotate past 2pi degrees or less than 2pi degrees")
 
     return np.array([
-        [np.cos(radians), -np.sin(radians), 0],
-        [np.sin(radians), np.cos(radians), 0],
+        [np.cos(radians), -np.sin(radians), translateX],
+        [np.sin(radians), np.cos(radians), translateY],
         [0, 0, 1]])
 
 class Axis(enum.Enum):
