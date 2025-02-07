@@ -8,9 +8,9 @@ import typing
 """
 CS4610/CS5335 - Spring 2025 - Homework 2
 
-Name:
-Email:
-With Whom you discussed the questions with:
+Name: Zachary Walker-Liang
+Email: walker-liang.z@northeastern.edu
+With Whom you discussed the questions with: Nobody yet
 """
 
 def C1_func(robot: typing.Dict[str, typing.List[float]], q: typing.List[float], obstacles: typing.List[Polygon]) -> None:
@@ -64,5 +64,11 @@ def C1_func(robot: typing.Dict[str, typing.List[float]], q: typing.List[float], 
     pivot1 =  [6.4, 2.5]
     pivot2 =  [8.5, 2.5]
 
-    plot_obstacles_robot(obstacles=obstacles, link1=shape1, link2=shape2, origin1=pivot1, origin2=pivot2)
+    linkShape1Transformed, linkShape2Transformed, pivot1Transformed, pivot2Transformed = q2poly(robot, q)
+
+    plot_obstacles_robot(obstacles=obstacles, 
+                         link1=linkShape1Transformed, 
+                         link2=linkShape2Transformed, 
+                         origin1=pivot1Transformed, 
+                         origin2=pivot2Transformed)
  
