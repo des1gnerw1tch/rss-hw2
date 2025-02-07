@@ -9,9 +9,9 @@ import typing
 """
 CS4610/CS5335 - Spring 2025 - Homework 2
 
-Name:
-Email:
-With Whom you discussed the questions with:
+Name: Zachary Walker-Liang
+Email: walker-liang.z@northeastern.edu
+With Whom you discussed the questions with: Nobody yet
 """
 
 def C2_func(robot: typing.Dict[str, typing.List[float]], cspace: np.array, obstacles: typing.List[Polygon],q_grid: np.array) -> np.array:
@@ -33,10 +33,24 @@ def C2_func(robot: typing.Dict[str, typing.List[float]], cspace: np.array, obsta
     np.array
         A 2D numpy array representing the updated configuration space. The first dimension is q1 and the second dimension is q2. Example: [q1, q2]
     """
-
-    ### Insert your code below: ###
-
-    # poly1 = Polygon_shapely(shape1_tuple)
-    # obs1 = Polygon_shapely(obstable_tuple)
+    for i in range(len(q_grid)):
+        for j in range(len(q_grid)):
+            cspace[i, j] = IsConfigurationIntersectingWithObstacle(robot, q_grid[i], q_grid[j], obstacles)
 
     return cspace
+
+def IsConfigurationIntersectingWithObstacle(robot: typing.Dict[str, typing.List[float]], q1, q2, obstacles: typing.List[Polygon]) -> bool:
+    obstaclePolygons = []
+    for obstacle in obstacles:
+        obstaclePolygons.append(Polygon_shapely(obstacle))
+
+    robotPolygons = []
+    linkShape1Transformed, linkShape2Transformed, pivot1, pivot2 = q2poly(robot, [q1, q2])
+    robotPolygons.append(Polygon_shapely(linkShape1Transformed))
+    robotPolygons.append(Polygon_shapely(linkShape2Transformed))
+
+    for oPoly in obstaclePolygons:
+        for rPoly in robotPolygons:
+            if (oPoly.intersects(rPoly)):
+                return True
+    return False
