@@ -4,13 +4,14 @@ import math
 from matplotlib.patches import Polygon
 from helper_functions import *
 import typing
+from C3 import FindNearestIndex
 
 """
 CS4610/CS5335 - Spring 2025 - Homework 2
 
-Name:
-Email:
-With Whom you discussed the questions with:
+Name: Zachary Walker-Liang
+Email: walker-liang.z@northeastern.edu
+With Whom you discussed the questions with: Nobody yet
 """
 
 def C4_func(distances: np.array,q_grid: np.array, q_start: np.array) -> typing.List[np.array]:
@@ -32,7 +33,31 @@ def C4_func(distances: np.array,q_grid: np.array, q_start: np.array) -> typing.L
         A list of 2 x 1 numpy array representing the path from the start configuration to the goal configuration using indices of q_grid.
         Example: [ [q1_0 , q2_0], [q1_1, q2_1], .... ]
     """
-    
+
     ### Insert your code below: ###
-    
-    return []
+    startingPosition = FindNearestIndex(q_start, q_grid)
+    distanceAwayFromGoal = distances[startingPosition[0]][startingPosition[1]]
+    path = []
+    path.append(np.array([startingPosition[0], startingPosition[1]]))
+
+    currentPosition = startingPosition
+    while (distanceAwayFromGoal != 0):
+        nearestNeighbor = None
+        nearestNeighborDistanceFromGoal = math.inf
+        for i in range(-1, 2): # Explore surrounding nodes
+            for j in range(-1, 2):
+                neighborXCoord = currentPosition[0] + i
+                neighborYCoord = currentPosition[1] + j
+                # Do not attempt to explore nodes that are out of bounds
+                if (neighborXCoord >= distances.shape[0] or neighborXCoord < 0 or neighborYCoord >= distances.shape[1] or neighborYCoord < 0):
+                    continue
+                
+                neighborDistanceFromGoal = distances[neighborXCoord, neighborYCoord]
+                # Find the neighbor that is closest to goal
+                if (nearestNeighborDistanceFromGoal > neighborDistanceFromGoal):
+                    nearestNeighbor = (neighborXCoord, neighborYCoord)
+                    nearestNeighborDistanceFromGoal = neighborDistanceFromGoal
+        currentPosition = nearestNeighbor
+        distanceAwayFromGoal = nearestNeighborDistanceFromGoal
+        path.append(np.array([nearestNeighbor[0], nearestNeighbor[1]]))
+    return path

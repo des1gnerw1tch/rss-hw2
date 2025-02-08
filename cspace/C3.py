@@ -38,7 +38,7 @@ def C3_func(robot: typing.Dict[str, typing.List[float]], cspace: np.array,q_grid
     ### Insert your code below: ###
     distances = np.full((cspace.shape[0], cspace.shape[1]), np.inf)
     exploreQueue = deque()
-    goalIndex = FindGoalIndex(q_goal, q_grid)
+    goalIndex = FindNearestIndex(q_goal, q_grid)
     exploreQueue.append(goalIndex)
     distances[goalIndex[0]][goalIndex[1]] = 0
     
@@ -63,7 +63,7 @@ def C3_func(robot: typing.Dict[str, typing.List[float]], cspace: np.array,q_grid
     return distances
 
 # Returns the index that is closest from q_grid values and q_goal
-def FindGoalIndex(q_goal: np.array, q_grid: np.array) -> tuple[int, int]:
+def FindNearestIndex(q_goal: np.array, q_grid: np.array) -> tuple[int, int]:
     closestPoint =[-1, -1]
     closestDiscreteQ1ValueToGoal = math.inf
     closestDiscreteQ2ValueToGoal = math.inf
