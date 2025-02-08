@@ -36,10 +36,6 @@ def C3_func(robot: typing.Dict[str, typing.List[float]], cspace: np.array,q_grid
     """
 
     ### Insert your code below: ###
-    #distances = np.empty((cspace.shape[0], cspace.shape[1]))
-    #for row in range(cspace.shape[0]):
-    #    for col in range(cspace.shape[1]):
-    #        distances[row][col] = math.sqrt(cspace[row, col] * cspace[row, col] + q_goal)
     distances = np.full((cspace.shape[0], cspace.shape[1]), np.inf)
     exploreQueue = deque()
     goalIndex = FindGoalIndex(q_goal, q_grid)
