@@ -8,9 +8,9 @@ import typing
 """
 CS4610/CS5335 - Spring 2025 - Homework 2
 
-Name:
-Email:
-With Whom you discussed the questions with:
+Name: Zachary Walker-Liang
+Email: walker-liang.z@northeastern.edu
+With Whom you discussed the questions with: Nobody yet
 """
 
 def C5_func(q_grid: np.array, q_start: np.array, q_goal:np.array, c_path: typing.List[np.array]) -> typing.List[np.array]:
@@ -35,5 +35,14 @@ def C5_func(q_grid: np.array, q_start: np.array, q_goal:np.array, c_path: typing
     """
 
     ### Insert your code below: ###
-    q_path = [np.array([0,0]), np.array([0,0])]
+
+    q_path = []
+    for index in c_path:
+        # My path algorithm in C4 already includes q_start and q_goal
+        q1, q2 = FindConfigurationAnglesFromConfigurationIndex(index[0], index[1], q_grid)
+        q_path.append(np.array([q1, q2]))
     return q_path
+
+# Finds the configuration angles q1, q2 from discretized angles
+def FindConfigurationAnglesFromConfigurationIndex(x: int, y: int, q_grid: np.array) -> tuple[float, float]:
+    return (q_grid[x], q_grid[y])
