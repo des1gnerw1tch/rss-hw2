@@ -82,5 +82,4 @@ def FindNearestIndex(q_goal: np.array, q_grid: np.array) -> tuple[int, int]:
             if q2Difference < closestDiscreteQ2ValueToGoal:
                 closestDiscreteQ2ValueToGoal = q2Difference
                 closestPoint[1] = j
-    print("Closest point to " + str(q_goal) + ": " + str(closestPoint))
     return (closestPoint[0], closestPoint[1])
