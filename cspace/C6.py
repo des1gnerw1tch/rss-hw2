@@ -15,7 +15,7 @@ CS4610/CS5335 - Spring 2025 - Homework 2
 
 Name: Zachary Walker-Liang
 Email: walker-liang.z@northeastern.edu
-With Whom you discussed the questions with: Nobody yet
+With Whom you discussed the questions with: Oliver Hugh and Kellan Mccarthy
 """
 
 def C6_func(robot: typing.Dict[str, typing.List[float]], 
